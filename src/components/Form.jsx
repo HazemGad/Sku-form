@@ -29,7 +29,6 @@ const SkuForm = () => {
         }}
       >
         <Row gutter={16}>
-          {/* Column 1 */}
           <Col span={12}>
             <Form.Item
               name="skuNameEn"
@@ -104,7 +103,6 @@ const SkuForm = () => {
             </Row>
           </Col>
 
-          {/* Column 2 */}
           <Col span={12}>
             <Form.Item
               name="skuNameAr"
@@ -164,7 +162,6 @@ const SkuForm = () => {
           </Col>
         </Row>
 
-        {/* Buttons */}
         <Row justify="space-between">
           <Col>
             <Button htmlType="button" className="Cancel-button">
