@@ -1,0 +1,30 @@
+
+.Card-width{
+    width: 100%;
+}
+.Form-width{
+    width: 25rem;
+}
+.Input-height{
+    height: 2.5rem;
+}
+.Cancel-button{
+    color: #1677ff;
+    border-color: #1677ff;
+    height: 2.2rem;
+    width: 6rem;
+}
+.Save-button{
+   
+    height: 2.2rem;
+    width: 8rem;
+}
+:where(.css-dev-only-do-not-override-16dneet).ant-form-item .ant-form-item-label>label.ant-form-item-required::before {
+    display: none !important;
+  
+}
+.required{
+    color: "red" !important;
+     padding: "4px"
+
+}
