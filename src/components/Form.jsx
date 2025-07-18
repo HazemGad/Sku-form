@@ -1,4 +1,6 @@
 import React from "react";
+import { useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
 import {
   Form,
   Input,
@@ -9,15 +11,36 @@ import {
   Switch,
   Space,
   Card,
+    Modal,
+    Checkbox,
+  Upload
 } from "antd";
 import "./form.css";
 const { Option } = Select;
-
+const normFile = (e) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e === null || e === void 0 ? void 0 : e.fileList;
+};
 const SkuForm = () => {
   const [form] = Form.useForm();
-
+    const [openModal, SetOpenModal] = useState(false)
+    const ModalOpen = () => {
+        SetOpenModal(true);
+    }
+    const ModalClose = () => {
+        SetOpenModal(false);
+    }
+  const categoryOptions = [
+    { label: "Loyalty", value: "Loyalty" },
+    { label: "Loyalty Integrations", value: "Loyalty Integrations" },
+    { label: "Coupons", value: "Coupons" },
+    { label: "Coupons Integrations", value: "Coupons Integrations" },
+    { label: "Loyalty Referrals", value: "Loyalty Referrals" },
+  ];
   return (
-    <Card  variant="borderless" className="Card-width">
+    <Card variant="borderless" className="Card-width">
       <Form
         form={form}
         layout="vertical"
@@ -34,7 +57,7 @@ const SkuForm = () => {
               name="skuNameEn"
               label={
                 <span>
-                  SKU Name (English) <span style={{ color: "red" }}>*</span>{" "}
+                  SKU Name (English) <span className="text-red-500">*</span>{" "}
                 </span>
               }
               rules={[{ required: true, message: "Please enter name" }]}
@@ -47,7 +70,7 @@ const SkuForm = () => {
               name="skuValue"
               label={
                 <span>
-                  SKU Value <span style={{ color: "red" }}>*</span>{" "}
+                  SKU Value <span className="text-red-500">*</span>{" "}
                 </span>
               }
               className="Form-width"
@@ -60,7 +83,7 @@ const SkuForm = () => {
               name="category"
               label={
                 <span>
-                  SKU Category <span style={{ color: "red" }}>*</span>{" "}
+                  SKU Category <span className="text-red-500">*</span>{" "}
                 </span>
               }
               className="Form-width"
@@ -71,31 +94,70 @@ const SkuForm = () => {
                 placeholder="Select Category"
                 className="Input-height"
                 maxTagCount="responsive"
+                options={categoryOptions}
+                optionRender={(option) => (
+                  <span
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span>{option.label}</span>
+                    <Checkbox />
+                  </span>
+                )}
                 popupRender={(menu) => (
                   <>
                     {menu}
-                    <Button type="link" block>
+                    <Button type="link" block onClick={ModalOpen}>
                       + Create New Category
                     </Button>
                   </>
                 )}
-              >
-                <Option value="Loyalty">Loyalty</Option>
-                <Option value="Loyalty Integrations">
-                  Loyalty Integrations
-                </Option>
-                <Option value="Coupons">Coupons</Option>
-                <Option value="Coupons Integrations">
-                  Coupons Integrations
-                </Option>
-                <Option value="Loyalty Referrals">Loyalty Referrals</Option>
-              </Select>
+              />
             </Form.Item>
 
             <Row justify="space-between" style={{ height: 35 }}>
               <label>
+                Use Value as Point
+                <span className="text-red-500 p-2">*</span>
+              </label>
+              <Form.Item name="ValuesPoints" valuePropName="checked">
+                <Switch style={{ width: 10 }} />
+              </Form.Item>
+            </Row>
+            <Row justify="space-between" style={{ height: 35 }}>
+              <label>
+                No Expiry
+                <span className="text-red-500 p-2">*</span>
+              </label>
+              <Form.Item name="expiry" valuePropName="checked">
+                <Switch style={{ width: 10 }} />
+              </Form.Item>
+            </Row>
+            <Row justify="space-between" style={{ height: 35 }}>
+              <label>
+                Accumlation SKU
+                <span className="text-red-500 p-2">*</span>
+              </label>
+              <Form.Item name="accumlationnSku" valuePropName="checked">
+                <Switch style={{ width: 10 }} />
+              </Form.Item>
+            </Row>
+            <Row justify="space-between" style={{ height: 35 }}>
+              <label>
+                Allow limited subscription
+                <span className="text-red-500 p-2">*</span>
+              </label>
+              <Form.Item name="subscriptionSku" valuePropName="checked">
+                <Switch style={{ width: 10 }} />
+              </Form.Item>
+            </Row>
+            <Row justify="space-between" style={{ height: 35 }}>
+              <label>
                 Redemption SKU
-                <span style={{ color: "red", padding: "4px" }}>*</span>
+                <span className="text-red-500 p-2">*</span>
               </label>
               <Form.Item name="redemptionSku" valuePropName="checked">
                 <Switch style={{ width: 10 }} />
@@ -108,19 +170,19 @@ const SkuForm = () => {
               name="skuNameAr"
               label={
                 <span>
-                  SKU Name (Arabic) <span style={{ color: "red" }}>*</span>{" "}
+                  SKU Name (Arabic) <span className="text-red-500">*</span>{" "}
                 </span>
               }
               rules={[{ required: true, message: "Please enter Arabic name" }]}
             >
-              <Input placeholder="Enter Code" className="Input-height" />
+              <Input placeholder="Enter Name" className="Input-height" />
             </Form.Item>
 
             <Form.Item
               name="skuCode"
               label={
                 <span>
-                  SKU Code <span style={{ color: "red" }}>*</span>{" "}
+                  SKU Code <span className="text-red-500">*</span>{" "}
                 </span>
               }
               className="Form-width"
@@ -133,7 +195,7 @@ const SkuForm = () => {
               name="offerNumber"
               label={
                 <span>
-                  Offer number <span style={{ color: "red" }}>*</span>{" "}
+                  Offer number <span className="text-red-500">*</span>{" "}
                 </span>
               }
               className="Form-width"
@@ -145,7 +207,7 @@ const SkuForm = () => {
             <Row justify="space-between" style={{ height: 35 }}>
               <label>
                 Check duration
-                <span style={{ color: "red", padding: "4px" }}>*</span>
+                <span className="text-red-500 p-2">*</span>
               </label>
               <Form.Item name="toggleCheckDuration" valuePropName="checked">
                 <Switch />
@@ -180,6 +242,64 @@ const SkuForm = () => {
             </Button>
           </Col>
         </Row>
+        <Modal
+          title="Add New Sku Category"
+          open={openModal}
+          onCancel={ModalClose}
+          footer={[
+            <Button key="cancel" onClick={ModalClose}>
+              Cancel
+            </Button>,
+            <Button key="submit" type="primary" onClick={ModalClose}>
+              Save
+            </Button>,
+          ]}
+        >
+          <Form.Item
+            label="Upload"
+            valuePropName="fileList"
+            getValueFromEvent={normFile}
+          >
+            <Upload action="/upload.do" listType="picture-card">
+              <button
+                style={{
+                  color: "inherit",
+                  cursor: "inherit",
+                  border: 0,
+                  background: "none",
+                }}
+                type="button"
+              >
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </button>
+            </Upload>
+          </Form.Item>
+          <Form.Item
+            name="skuNameEn"
+            label={
+              <span>
+                SKU Name (English) <span className="text-red-500">*</span>{" "}
+              </span>
+            }
+            rules={[{ required: true, message: "Please enter name" }]}
+            className="Form-width"
+          >
+            <Input placeholder="Enter Name" className="Input-height" />
+          </Form.Item>
+          <Form.Item
+            name="skuNameEn"
+            label={
+              <span>
+                SKU Name (English) <span className="text-red-500">*</span>{" "}
+              </span>
+            }
+            rules={[{ required: true, message: "Please enter name" }]}
+            className="Form-width"
+          >
+            <Input placeholder="Enter Name" className="Input-height" />
+          </Form.Item>
+        </Modal>
       </Form>
     </Card>
   );
