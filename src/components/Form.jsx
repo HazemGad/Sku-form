@@ -29,12 +29,21 @@ const normFile = (e) => {
 };
 
 const SkuForm = () => {
+  const [categoryOptions, setCategoryOptions] = useState([
+    { label: "Loyalty", value: "Loyalty" },
+    { label: "Loyalty Integrations", value: "Loyalty Integrations" },
+    { label: "Coupons", value: "Coupons" },
+    { label: "Coupons Integrations", value: "Coupons Integrations" },
+    { label: "Loyalty Referrals", value: "Loyalty Referrals" },
+  ]);
 
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [openModal, SetOpenModal] = useState(false); //0000000000000
+  const [openModal, SetOpenModal] = useState(false);
   const [congrats, Setcongrats] = useState(false);
   const [fileList, setFileList] = useState([]);
+  const [newCategory, setNewCategory] = useState("");
+
   const ModalOpen = () => {
     SetOpenModal(true);
   };
@@ -45,14 +54,13 @@ const SkuForm = () => {
     Setcongrats(true);
     setTimeout(() => {
       Setcongrats(false);
-        navigate("/skus"); //add here the path 
+      navigate("/skus"); //add here the path
     }, 3000);
   };
   const CancelReset = () => {
-     form.resetFields(); 
-    navigate("/skus");
-    
-}
+    form.resetFields();
+    navigate("/skus"); //add here the path
+  };
   const CongrateClose = () => {
     Setcongrats(false);
   };
@@ -69,15 +77,6 @@ const SkuForm = () => {
     SetOpenModal(false);
     setNewCategory("");
   };
-  const [categoryOptions, setCategoryOptions] = useState([
-    { label: "Loyalty", value: "Loyalty" },
-    { label: "Loyalty Integrations", value: "Loyalty Integrations" },
-    { label: "Coupons", value: "Coupons" },
-    { label: "Coupons Integrations", value: "Coupons Integrations" },
-    { label: "Loyalty Referrals", value: "Loyalty Referrals" },
-  ]);
-
-  const [newCategory, setNewCategory] = useState("");
 
   return (
     <Card variant="borderless" className="Card-width">
@@ -275,7 +274,10 @@ const SkuForm = () => {
               <Input placeholder="Enter Points" className="Input-height" />
             </Form.Item>
 
-            <Row justify="space-between" style={{ height: 35, width: "31.4rem" }}>
+            <Row
+              justify="space-between"
+              style={{ height: 35, width: "31.4rem" }}
+            >
               <label>
                 Check duration
                 <span className="text-red-500 p-2">*</span>
@@ -311,7 +313,6 @@ const SkuForm = () => {
             <Button
               type="primary"
               htmlType="submit"
-              style={{ width: "8rem" }}
               className="Save-button"
             >
               Save
