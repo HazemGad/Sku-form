@@ -1,5 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import ShadowBar from "./ShadowBar";
+import SuccessIcon from "./success-icon";
 import { PlusOutlined } from "@ant-design/icons";
 import {
   Form,
@@ -11,9 +14,10 @@ import {
   Switch,
   Space,
   Card,
-    Modal,
-    Checkbox,
-  Upload
+  Modal,
+  Checkbox,
+  Upload,
+  Divider,
 } from "antd";
 import "./form.css";
 const { Option } = Select;
@@ -23,22 +27,58 @@ const normFile = (e) => {
   }
   return e === null || e === void 0 ? void 0 : e.fileList;
 };
+
 const SkuForm = () => {
+
   const [form] = Form.useForm();
-    const [openModal, SetOpenModal] = useState(false)
-    const ModalOpen = () => {
-        SetOpenModal(true);
-    }
-    const ModalClose = () => {
-        SetOpenModal(false);
-    }
-  const categoryOptions = [
+  const navigate = useNavigate();
+  const [openModal, SetOpenModal] = useState(false); //0000000000000
+  const [congrats, Setcongrats] = useState(false);
+  const [fileList, setFileList] = useState([]);
+  const ModalOpen = () => {
+    SetOpenModal(true);
+  };
+  const ModalClose = () => {
+    SetOpenModal(false);
+  };
+  const CongrateOpen = () => {
+    Setcongrats(true);
+    setTimeout(() => {
+      Setcongrats(false);
+        navigate("/skus"); //add here the path 
+    }, 3000);
+  };
+  const CancelReset = () => {
+     form.resetFields(); 
+    navigate("/skus");
+    
+}
+  const CongrateClose = () => {
+    Setcongrats(false);
+  };
+  const ModalSaveClose = () => {
+    if (newCategory.trim() === "") return;
+
+    const newOption = {
+      label: newCategory,
+      value: newCategory,
+    };
+
+    setCategoryOptions((prev) => [...prev, newOption]);
+
+    SetOpenModal(false);
+    setNewCategory("");
+  };
+  const [categoryOptions, setCategoryOptions] = useState([
     { label: "Loyalty", value: "Loyalty" },
     { label: "Loyalty Integrations", value: "Loyalty Integrations" },
     { label: "Coupons", value: "Coupons" },
     { label: "Coupons Integrations", value: "Coupons Integrations" },
     { label: "Loyalty Referrals", value: "Loyalty Referrals" },
-  ];
+  ]);
+
+  const [newCategory, setNewCategory] = useState("");
+
   return (
     <Card variant="borderless" className="Card-width">
       <Form
@@ -95,6 +135,14 @@ const SkuForm = () => {
                 className="Input-height"
                 maxTagCount="responsive"
                 options={categoryOptions}
+                popupRender={(menu) => (
+                  <>
+                    <Button type="link" block onClick={ModalOpen}>
+                      + Create New Category
+                    </Button>
+                    {menu}
+                  </>
+                )}
                 optionRender={(option) => (
                   <span
                     style={{
@@ -107,18 +155,16 @@ const SkuForm = () => {
                     <Checkbox />
                   </span>
                 )}
-                popupRender={(menu) => (
-                  <>
-                    {menu}
-                    <Button type="link" block onClick={ModalOpen}>
-                      + Create New Category
-                    </Button>
-                  </>
-                )}
               />
             </Form.Item>
 
-            <Row justify="space-between" style={{ height: 35 }}>
+            <Row
+              style={{
+                height: 35,
+                justifyContent: "space-between",
+                width: "19rem",
+              }}
+            >
               <label>
                 Use Value as Point
                 <span className="text-red-500 p-2">*</span>
@@ -127,7 +173,13 @@ const SkuForm = () => {
                 <Switch style={{ width: 10 }} />
               </Form.Item>
             </Row>
-            <Row justify="space-between" style={{ height: 35 }}>
+            <Row
+              style={{
+                height: 35,
+                justifyContent: "space-between",
+                width: "19rem",
+              }}
+            >
               <label>
                 No Expiry
                 <span className="text-red-500 p-2">*</span>
@@ -136,7 +188,13 @@ const SkuForm = () => {
                 <Switch style={{ width: 10 }} />
               </Form.Item>
             </Row>
-            <Row justify="space-between" style={{ height: 35 }}>
+            <Row
+              style={{
+                height: 35,
+                justifyContent: "space-between",
+                width: "19rem",
+              }}
+            >
               <label>
                 Accumlation SKU
                 <span className="text-red-500 p-2">*</span>
@@ -145,7 +203,13 @@ const SkuForm = () => {
                 <Switch style={{ width: 10 }} />
               </Form.Item>
             </Row>
-            <Row justify="space-between" style={{ height: 35 }}>
+            <Row
+              style={{
+                height: 35,
+                justifyContent: "space-between",
+                width: "19rem",
+              }}
+            >
               <label>
                 Allow limited subscription
                 <span className="text-red-500 p-2">*</span>
@@ -154,7 +218,13 @@ const SkuForm = () => {
                 <Switch style={{ width: 10 }} />
               </Form.Item>
             </Row>
-            <Row justify="space-between" style={{ height: 35 }}>
+            <Row
+              style={{
+                height: 35,
+                justifyContent: "space-between",
+                width: "19rem",
+              }}
+            >
               <label>
                 Redemption SKU
                 <span className="text-red-500 p-2">*</span>
@@ -168,6 +238,7 @@ const SkuForm = () => {
           <Col span={12}>
             <Form.Item
               name="skuNameAr"
+              className="Form-width"
               label={
                 <span>
                   SKU Name (Arabic) <span className="text-red-500">*</span>{" "}
@@ -204,7 +275,7 @@ const SkuForm = () => {
               <Input placeholder="Enter Points" className="Input-height" />
             </Form.Item>
 
-            <Row justify="space-between" style={{ height: 35 }}>
+            <Row justify="space-between" style={{ height: 35, width: "31.4rem" }}>
               <label>
                 Check duration
                 <span className="text-red-500 p-2">*</span>
@@ -226,7 +297,12 @@ const SkuForm = () => {
 
         <Row justify="space-between">
           <Col>
-            <Button htmlType="button" className="Cancel-button">
+            <Button
+              htmlType="button"
+              className="Cancel-button"
+              onClick={CancelReset}
+              navigate
+            >
               Cancel
             </Button>
           </Col>
@@ -242,67 +318,136 @@ const SkuForm = () => {
             </Button>
           </Col>
         </Row>
+      </Form>
+      <div>
         <Modal
           title="Add New Sku Category"
           open={openModal}
           onCancel={ModalClose}
           footer={[
-            <Button key="cancel" onClick={ModalClose}>
-              Cancel
-            </Button>,
-            <Button key="submit" type="primary" onClick={ModalClose}>
-              Save
-            </Button>,
+            <Row className="ButtonsPad" style={{}}>
+              <Col></Col>
+
+              <Col className="btnGroup" style={{ justifyContent: "end" }}>
+                <Button
+                  htmlType="button"
+                  className="CancelModal"
+                  onClick={() => {
+                    ModalClose();
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ width: "8rem" }}
+                  className="Create-button "
+                  onClick={() => {
+                    CongrateOpen();
+                    ModalClose();
+                  }}
+                  disabled={newCategory.trim() === ""}
+                >
+                  Create
+                </Button>
+              </Col>
+            </Row>,
           ]}
         >
+          <label className="ml-3 font-bold ">Update logo</label>
           <Form.Item
-            label="Upload"
             valuePropName="fileList"
             getValueFromEvent={normFile}
+            className="mt-2"
           >
-            <Upload action="/upload.do" listType="picture-card">
-              <button
-                style={{
-                  color: "inherit",
-                  cursor: "inherit",
-                  border: 0,
-                  background: "none",
-                }}
-                type="button"
-              >
-                <PlusOutlined />
-                <div style={{ marginTop: 8 }}>Upload</div>
-              </button>
+            <Upload
+              action="/upload.do"
+              listType="picture-card"
+              style={{ margin: "0.4rem 0 0 0.1rem" }}
+              maxCount={1}
+              fileList={fileList}
+              onChange={({ fileList: newFileList }) => {
+                setFileList(newFileList);
+              }}
+              onRemove={() => {
+                setFileList([]);
+              }}
+            >
+              {fileList.length >= 1 ? null : (
+                <div>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Upload</div>
+                </div>
+              )}
             </Upload>
           </Form.Item>
+          <Divider style={{ borderColor: "grey" }} />
           <Form.Item
             name="skuNameEn"
             label={
               <span>
-                SKU Name (English) <span className="text-red-500">*</span>{" "}
+                English Name <span className="text-red-500">*</span>{" "}
               </span>
             }
-            rules={[{ required: true, message: "Please enter name" }]}
+            rules={[{ required: true, message: "Enter Client name (English)" }]}
             className="Form-width"
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
           >
-            <Input placeholder="Enter Name" className="Input-height" />
+            <Input
+              placeholder="Enter Name"
+              value={newCategory}
+              className="Input-height InputModalWidth"
+              onChange={(e) => setNewCategory(e.target.value)}
+            />
           </Form.Item>
           <Form.Item
             name="skuNameEn"
-            label={
-              <span>
-                SKU Name (English) <span className="text-red-500">*</span>{" "}
-              </span>
-            }
-            rules={[{ required: true, message: "Please enter name" }]}
+            label={<span>Arabic Name </span>}
+            rules={[{ message: "Enter Client name (Arabic)" }]}
             className="Form-width"
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
           >
-            <Input placeholder="Enter Name" className="Input-height" />
+            <Input
+              placeholder="Enter Name"
+              className="Input-height InputModalWidth"
+            />
           </Form.Item>
         </Modal>
-      </Form>
+      </div>
+      <div>
+        <Modal open={congrats} footer={null} width={424} closable={false}>
+          <div style={{ height: 281 }}>
+            <Row
+              justify="center"
+              align="middle"
+              style={{ padding: "2rem 0 0 0 " }}
+            >
+              <SuccessIcon />
+            </Row>
+            <Row
+              justify="center"
+              align="middle"
+              style={{ padding: "0 0 3.5rem 0" }}
+            >
+              <ShadowBar />
+            </Row>
+            <h1
+              className="font-bold text-[24px] leading-[100%] tracking-normal text-center font-[Poppins]"
+              style={{ padding: "0 0 1rem 0" }}
+            >
+              Congratulations,
+            </h1>
+            <h3 className="font-normal text-[16px] leading-[100%] tracking-normal text-center font-[Poppins] text-[#A1A5B7]">
+              SKU has been successfully added!
+            </h3>
+          </div>
+        </Modal>
+      </div>
     </Card>
   );
 };
-
+1;
 export default SkuForm;
